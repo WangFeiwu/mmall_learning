@@ -2,8 +2,10 @@ package com.wfw.mmall.common;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * @author F7689334
@@ -12,7 +14,8 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  */
 //保证序列化json的时候,如果是null的对象,key也会消失:
 //status=0,msg="success",data=null --> {status:0,msg:"success"}
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+//@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ServerResponse<T> implements Serializable {
 	
 	private int status;
@@ -41,7 +44,7 @@ public class ServerResponse<T> implements Serializable {
 	}
 	
 	//使之不在json序列化结果当中
-	@JsonIgnore	
+	@JsonIgnore
 	public boolean isSuccess() {
 		return this.status==ResponseCode.SUCCESS.getCode();
 	}
