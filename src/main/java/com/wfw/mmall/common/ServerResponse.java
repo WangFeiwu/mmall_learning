@@ -10,9 +10,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  *
  * @param <T>
  */
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 //保证序列化json的时候,如果是null的对象,key也会消失:
 //status=0,msg="success",data=null --> {status:0,msg:"success"}
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class ServerResponse<T> implements Serializable {
 	
 	private int status;
@@ -40,8 +40,8 @@ public class ServerResponse<T> implements Serializable {
 		this.data=data;
 	}
 	
-	@JsonIgnore	
 	//使之不在json序列化结果当中
+	@JsonIgnore	
 	public boolean isSuccess() {
 		return this.status==ResponseCode.SUCCESS.getCode();
 	}

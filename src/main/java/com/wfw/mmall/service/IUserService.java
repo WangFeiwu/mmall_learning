@@ -21,11 +21,19 @@ public interface IUserService {
 	 */
 	ServerResponse<String> checkValid(String str,String type);
 	//通过用户名查询找回密码问题
-	ServerResponse seleteQuestion(String username);
+	ServerResponse<String> seleteQuestion(String username);
 	//验证找回密码问题的答案
 	ServerResponse<String> checkAnswer(String username,String question,String answer);
-	//重置密码
+	//忘记密码->重置密码
 	ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken);
+	//登录状态->重置密码
+	ServerResponse<String> resetPassword(String passwordOld,String passwordNew,User user);
+	//更新个人信息
+	ServerResponse<User> updateInfomation(User user);
+	//根据用户id获取用户信息
+	ServerResponse<User> getInformation(Integer id);
+	
+	
 	
 	
 }
