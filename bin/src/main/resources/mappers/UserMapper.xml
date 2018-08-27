@@ -101,7 +101,7 @@
         now(),
       </if>
       <if test="updateTime != null">
-        now()
+        now(),
       </if>
     </trim>
   </insert>
@@ -133,7 +133,7 @@
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="updateTime != null">
-        update_time=now()
+        now(),
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}

@@ -4,7 +4,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,7 +69,7 @@ public class UserController {
 	/**
 	 * 验证用户名和邮箱是否已存在
 	 * @param str
-	 * @param type
+	 * @param type:username/email
 	 * @return
 	 */
 	@RequestMapping(value="check_valid.do",method=RequestMethod.POST)
