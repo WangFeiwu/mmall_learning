@@ -40,6 +40,9 @@ public class PropertiesUtil {
 
         String value = props.getProperty(key.trim());
         if(StringUtils.isBlank(value)){
+            if(StringUtils.isBlank(defaultValue)){
+                return null;
+            }
             value = defaultValue;
         }
         return value.trim();
