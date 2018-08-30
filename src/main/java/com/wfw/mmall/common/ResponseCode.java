@@ -14,7 +14,6 @@ public enum ResponseCode {
 	private final String desc;
 	
 	ResponseCode(int code,String desc) {
-		// TODO Auto-generated constructor stub
 		this.code=code;
 		this.desc=desc;
 	}
