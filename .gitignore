@@ -1,5 +1,4 @@
 *.class
-bin/
 
 #package file
 *.war
