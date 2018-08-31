@@ -3,12 +3,14 @@ package com.wfw.mmall.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.wfw.mmall.common.Const;
 import com.wfw.mmall.common.ResponseCode;
 import com.wfw.mmall.common.ServerResponse;
 import com.wfw.mmall.dao.CategoryMapper;
 import com.wfw.mmall.dao.ProductMapper;
 import com.wfw.mmall.pojo.Category;
 import com.wfw.mmall.pojo.Product;
+import com.wfw.mmall.service.ICategoryService;
 import com.wfw.mmall.service.IProductService;
 import com.wfw.mmall.util.PropertiesUtil;
 import com.wfw.mmall.vo.ProductDetailVo;
@@ -31,6 +33,9 @@ public class ProductServiceImpl implements IProductService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private ICategoryService iCategoryService;
 
     @Override
     public ServerResponse saveOrUpdateProduct(Product product) {
@@ -124,6 +129,44 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(pageResult);
     }
 
+    @Override
+    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId) {
+        if (productId==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        Product product=productMapper.selectByPrimaryKey(productId);
+        //先判断商品是否在线
+        if (product==null||product.getStatus()!= Const.ProductStatusEnum.ON_SALE.getCode()){
+            return ServerResponse.createByErrorMessage("产品已下架或删除");
+        }
+        ProductDetailVo productDetailVo=assembleProductDetailVo(product);
+
+        return ServerResponse.createBySuccess(productDetailVo);
+    }
+
+    @Override
+    public ServerResponse<PageInfo> getProductByKeywordAndCategoryId(String keyword, Integer categoryId, int pageNum, int pageSize,String orderBy) {
+        if (StringUtils.isBlank(keyword)&&categoryId==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());
+        }
+        List<Integer> categoryIdList=Lists.newArrayList();
+        if (categoryId!=null){
+            Category category=categoryMapper.selectByPrimaryKey(categoryId);
+            if (category==null&&StringUtils.isBlank(keyword)){
+                PageHelper.startPage(pageNum,pageSize);
+                List<ProductListVo> productListVoList=Lists.newArrayList();
+                PageInfo pageInfo=new PageInfo(productListVoList);//返回一个空的结果集，不报错
+                return ServerResponse.createBySuccess(pageInfo);
+            }
+            categoryIdList=iCategoryService.selectCategoryAndChildrenById(category.getId()).getData();
+            if (StringUtils.isNotBlank(keyword)){
+                keyword=new StringBuilder().append("%").append(keyword).append("%").toString();
+            }
+            PageHelper.startPage(pageNum,pageSize);
+
+        }
+        return null;
+    }
     private ProductDetailVo assembleProductDetailVo(Product product){
         ProductDetailVo productDetailVo=new ProductDetailVo();
         productDetailVo.setId(product.getId());

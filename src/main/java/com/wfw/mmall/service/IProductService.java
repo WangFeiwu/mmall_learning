@@ -1,5 +1,6 @@
 package com.wfw.mmall.service;
 
+import com.github.pagehelper.PageInfo;
 import com.wfw.mmall.common.ServerResponse;
 import com.wfw.mmall.pojo.Product;
 import com.wfw.mmall.vo.ProductDetailVo;
@@ -50,6 +51,22 @@ public interface IProductService {
      */
     ServerResponse productSearch(String productName,Integer productId,int pageNum,int pageSize);
 
+    /**
+     * 前台获取商品详情
+     * @param productId
+     * @return
+     */
+    ServerResponse<ProductDetailVo> getProductDetail(Integer productId);
 
+    /**
+     * 关键字分页搜索,动态排序
+     * @param keyword
+     * @param categoryId
+     * @param pageNum
+     * @param pageSize
+     * @param orderBy
+     * @return
+     */
+    ServerResponse<PageInfo> getProductByKeywordAndCategoryId(String keyword,Integer categoryId,int pageNum,int pageSize,String orderBy);
 
 }
